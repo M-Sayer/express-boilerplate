@@ -20,4 +20,15 @@ app.get('/', (req, res) => {
     .send('Hello, world!');
 });
 
+app.use(function errorHandler(error, req, res, _next) {
+  let response;
+  if(process.env.NODE_ENV === 'production') {
+    response = { error: {message: 'server error'}};
+  } else {
+    console.log(error);
+    response = { message: error.message, error};
+  }
+  res.status(500).json(response);
+});
+
 module.exports = app;
